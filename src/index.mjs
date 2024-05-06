@@ -9,16 +9,25 @@ app.get('/', (req, res) => {
 const mockUsers = [
 	{ id: 1, username: 'anson', displayName: 'Anson' },
 	{ id: 2, username: 'jack', displayName: 'Jack' },
-	{ id: 3, username: 'adam', displayName: 'Adam' },
+	{ id: 3, username: 'anna', displayName: 'Anna' },
+	{ id: 4, username: 'tina', displayName: 'Tina' },
+	{ id: 5, username: 'jason', displayName: 'Jason' },
+	{ id: 6, username: 'henry', displayName: 'Henry' },
+	{ id: 7, username: 'marilyn', displayName: 'Marilyn' },
 ];
 
 app.get('/api/users', (req, res) => {
-	res.send(mockUsers);
+	const { filter, value } = req.query;
+
+	if (filter && value) {
+		return res.send(mockUsers.filter((user) => user[filter].includes(value)));
+	}
+
+	return res.send(mockUsers);
 });
 
 app.get('/api/users/:id', (req, res) => {
 	const parsedId = parseInt(req.params.id);
-	console.log(parsedId);
 	if (isNaN(parsedId)) {
 		return res.status(400).send({ msg: 'Bad Request. Invalid ID.' });
 	}
