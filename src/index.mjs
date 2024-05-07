@@ -1,4 +1,11 @@
-import express, { response } from 'express';
+import express from 'express';
+import {
+	query,
+	validationResult,
+	matchedData,
+	checkSchema,
+} from 'express-validator';
+import { createUserValidationSchema } from './utils/validationSchemas.mjs';
 
 const app = express();
 
@@ -32,17 +39,19 @@ const mockUsers = [
 
 app.get('/api/users', (req, res) => {
 	const { filter, value } = req.query;
-
 	if (filter && value) {
 		return res.send(mockUsers.filter((user) => user[filter].includes(value)));
 	}
-
 	return res.send(mockUsers);
 });
 
-app.post('/api/users', (req, res) => {
-	const { body } = req;
-	const newUser = { id: mockUsers[mockUsers.length - 1].id + 1, ...body };
+app.post('/api/users', checkSchema(createUserValidationSchema), (req, res) => {
+	const result = validationResult(req);
+	if (!result.isEmpty()) {
+		return res.status(400).send({ errors: result.array() });
+	}
+	const data = matchedData(req);
+	const newUser = { id: mockUsers[mockUsers.length - 1].id + 1, ...data };
 	mockUsers.push(newUser);
 	return res.status(201).send(newUser);
 });
