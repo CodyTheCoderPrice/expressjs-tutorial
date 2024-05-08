@@ -17,8 +17,6 @@ const resolveIndexByUserId = (req, res, next) => {
 	next();
 };
 
-router.use(express.json());
-
 router.get('/api/users', (req, res) => {
 	const { filter, value } = req.query;
 	if (filter && value) {
