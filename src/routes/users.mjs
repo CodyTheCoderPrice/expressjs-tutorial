@@ -18,6 +18,7 @@ const resolveIndexByUserId = (req, res, next) => {
 };
 
 router.get('/api/users', (req, res) => {
+	console.log(req.session.id);
 	const { filter, value } = req.query;
 	if (filter && value) {
 		return res.send(mockUsers.filter((user) => user[filter].includes(value)));
