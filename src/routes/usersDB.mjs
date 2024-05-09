@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { validationResult, matchedData, checkSchema } from 'express-validator';
 import { createUserValidationSchema } from '../utils/validationSchemas.mjs';
 import { User } from '../mongoose/schemas/user.mjs';
+import { hashpassword } from '../utils/helpers.mjs';
 
 const router = Router();
 
@@ -14,6 +15,7 @@ router.post(
 			return res.status(400).send({ errors: result.array() });
 		}
 		const data = matchedData(req);
+		data.password = hashpassword(data.password);
 		const newUser = new User(data);
 		try {
 			const savedUser = await newUser.save();
