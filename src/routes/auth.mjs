@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import passport from 'passport';
 import { mockUsers } from '../utils/constants.mjs';
 
 const router = Router();
@@ -21,21 +22,27 @@ router.get('/api/auth/status', (req, res) => {
 		: res.status(401).send({ msg: 'Not Authenticated' });
 });
 
-router.get('/api/cart', (req, res) => {
-	if (!req.session.user) return res.sendStatus(401);
-	return res.send(req.session.cart ?? []);
+router.post(
+	'/api/auth/passport',
+	passport.authenticate('local'),
+	(req, res) => {
+		res.sendStatus(200);
+	}
+);
+
+router.get('/api/auth/passport/status', (req, res) => {
+	return req.user
+		? res.status(200).send(req.user)
+		: res.status(401).send({ msg: 'Not Authenticated' });
 });
 
-router.post('/api/cart', (req, res) => {
-	if (!req.session.user) return res.sendStatus(401);
-	const { body: item } = req;
-	const { cart } = req.session;
-	if (cart) {
-		cart.push(item);
-	} else {
-		req.session.cart = [item];
-	}
-	return res.status(201).send(item);
+router.post('/api/auth/passport/logout', (req, res) => {
+	if (!req.user) return res.sendStatus(401);
+
+	req.logout((err) => {
+		if (err) return res.sendStatus(400);
+		res.sendStatus(200);
+	});
 });
 
 export default router;

@@ -3,6 +3,8 @@ import express from 'express';
 import routes from './routes/index.mjs';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
+import passport from 'passport';
+import './strategies/local-strategy.mjs';
 
 const app = express();
 
@@ -20,6 +22,9 @@ app.use(
 		},
 	})
 );
+// Must be after session middleware but before routes
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Must be after middleware
 app.use(routes);
