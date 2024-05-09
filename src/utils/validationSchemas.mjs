@@ -15,4 +15,12 @@ export const createUserValidationSchema = {
 			errorMessage: 'DisplayName must be 3-32 characters',
 		},
 	},
+	password: {
+		notEmpty: { errorMessage: 'Password cannot be empty' },
+		isString: { errorMessage: 'Password must be a string' },
+		isLength: {
+			options: { min: 5, max: 20 },
+			errorMessage: 'password must be 5-20 characters',
+		},
+	},
 };
