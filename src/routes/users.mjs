@@ -1,4 +1,4 @@
-import express, { Router } from 'express';
+import { Router } from 'express';
 import { validationResult, matchedData, checkSchema } from 'express-validator';
 import { createUserValidationSchema } from '../utils/validationSchemas.mjs';
 import { mockUsers } from '../utils/constants.mjs';

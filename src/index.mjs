@@ -28,8 +28,8 @@ app.get('/', (req, res) => {
 	console.log(req.session);
 	console.log(req.session.id);
 	req.session.visited = true;
-	res.cookie('hello', 'world', { maxAge: 60000 });
-	res.cookie('shhh', 'this is signed', { maxAge: 60000, signed: true });
+	res.cookie('hello', 'world', { maxAge: 60000 * 60 });
+	res.cookie('shhh', 'this is signed', { maxAge: 60000 * 60, signed: true });
 	res.send('Hello World!');
 });
 
