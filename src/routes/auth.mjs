@@ -23,8 +23,18 @@ router.get('/api/auth/status', (req, res) => {
 });
 
 router.post(
-	'/api/auth/passport',
+	'/api/auth/passport/local',
 	passport.authenticate('local'),
+	(req, res) => {
+		res.sendStatus(200);
+	}
+);
+
+router.get('/api/auth/passport/discord', passport.authenticate('discord'));
+
+router.get(
+	'/api/auth/passport/discord/redirect',
+	passport.authenticate('discord'),
 	(req, res) => {
 		res.sendStatus(200);
 	}
