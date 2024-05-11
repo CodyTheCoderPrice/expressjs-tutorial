@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { validationResult, matchedData, checkSchema } from 'express-validator';
 import { createUserValidationSchema } from '../utils/validationSchemas.mjs';
 import { mockUsers } from '../utils/constants.mjs';
+import { getUserByIdHandler } from '../handlers/users.mjs';
 
 const router = Router();
 
@@ -41,10 +42,7 @@ router.post(
 	}
 );
 
-router.get('/api/users/:id', resolveIndexByUserId, (req, res) => {
-	const { findUserIndex } = req;
-	return res.send(mockUsers[findUserIndex]);
-});
+router.get('/api/users/:id', resolveIndexByUserId, getUserByIdHandler);
 
 router.put('/api/users/:id', resolveIndexByUserId, (req, res) => {
 	const { body, findUserIndex } = req;
